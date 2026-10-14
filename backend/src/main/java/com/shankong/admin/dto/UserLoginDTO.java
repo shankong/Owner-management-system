@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserLoginDTO {
-    @NotBlank(message = "账号不能为空")
+    @NotBlank(message = "用户名或手机号不能为空")
     private String account;
 
     @NotBlank(message = "密码不能为空")

@@ -13,10 +13,10 @@ class AdminApplicationTests {
 
 	@Test
 	void contextLoads() {
-        UserRegisterDTO dto = new UserRegisterDTO();     // 故意全空
-        Set<ConstraintViolation<UserRegisterDTO>> violations =
-                Validation.buildDefaultValidatorFactory().getValidator().validate(dto);
-        violations.forEach(v -> System.out.println(v.getPropertyPath() + " -> " + v.getMessage()));
-	}
+//        UserRegisterDTO dto = new UserRegisterDTO();     // 故意全空
+//        Set<ConstraintViolation<UserRegisterDTO>> violations =
+//                Validation.buildDefaultValidatorFactory().getValidator().validate(dto);
+//        violations.forEach(v -> System.out.println(v.getPropertyPath() + " -> " + v.getMessage()));
+    }
 
 }
