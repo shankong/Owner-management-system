@@ -1,0 +1,4 @@
+com\shankong\admin\probe\MybatisProbeTest.class
+com\shankong\admin\probe\OwnerProbe.class
+com\shankong\admin\probe\OwnerProbeMapper.class
+com\shankong\admin\AdminApplicationTests.class

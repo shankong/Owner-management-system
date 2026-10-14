@@ -1,0 +1,81 @@
+# 服务端口
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  # 数据库配置
+  datasource:
+    # 注意：这里不再写 type: com.alibaba.druid.pool.DruidDataSource
+    # spring.datasource.type 是 Spring Boot 自带 DataSourceAutoConfiguration 的属性，
+    # 而 dynamic-datasource 会抢在它前面创建 DataSource，使 DataSourceAutoConfiguration 失效，
+    # 所以写在最外层的 type 既不生效、又会让 IDE 报“无法解析”（Druid 类不在类路径上时）。
+    # 连接池类型请写在下面每个数据源的 type 上。
+    dynamic:
+      # 设置默认的数据源或者数据源组,默认值为master
+      primary: master
+      # 严格匹配数据源,默认false,true未匹配到指定数据源时抛异常,false使用默认数据源
+      strict: false
+      # 多数据源支持，切记实际使用时按需使用，不需要的数据源注释掉
+      datasource:
+        # 主数据库MySQL
+        master:
+          # 连接池类型：真正决定用哪个池。用了 druid 类，pom 里就必须有 com.alibaba:druid
+          type: com.alibaba.druid.pool.DruidDataSource
+          driverClassName: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/owner_system?useSSL=false&serverTimezone=UTC
+          username: root
+          password: 123456
+          # 连接池参数（可选，不写就用 Druid 默认值），等价于原来的 spring.datasource.druid.*
+          # druid:
+          #   initial-size: 5
+          #   min-idle: 5
+          #   max-active: 20
+          #   max-wait: 60000
+          #   validation-query: SELECT 1
+
+# ===================== 日志配置 =====================
+logging:
+  # 级别从低到高：TRACE < DEBUG < INFO < WARN < ERROR
+  # 规则：只会输出 >= 设定级别的日志；例如设 info 时 debug 不打印
+  level:
+    root: info
+    # 自己的业务包：开发期开 debug，看得清流程；上线改回 info
+    com.shankong.admin: debug
+    # Mapper 接口所在包开 debug，MyBatis 就会把 每条 SQL + 参数 + 影响行数 打进日志
+    # （这是“打印 SQL”的推荐做法；包名等你建好 mapper 包后按实际改）
+    com.shankong.admin.mapper: debug
+    # org.springframework.jdbc.core: debug   # 用 JdbcTemplate 时才需要
+    # org.springframework.web: debug         # 想看请求映射、参数绑定过程
+  # 既输出到控制台，也写文件。相对路径基于“启动时的工作目录”（IDEA 里是 backend 目录）
+  file:
+    name: logs/admin.log
+  # 日志格式：时间 级别 [线程] 类名 - 内容
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+
+# ===================== MyBatis-Plus 配置 =====================
+mybatis-plus:
+  configuration:
+    # 驼峰映射：表字段 id_card / created_at  ->  实体属性 idCard / createdAt
+    # 原生 MyBatis 默认是 false（必须手开）；MyBatis-Plus 默认就是 true，
+    # 这里显式写出来，避免以后换回原生 MyBatis 时“莫名查出来是 null”
+    map-underscore-to-camel-case: true
+    # SQL 日志走哪个实现：Slf4jImpl = 交给日志框架（配合上面的 logging.level 生效）
+    # 想图省事直接 System.out 打印，可改成 org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  # Mapper XML 的位置（只用注解 + BaseMapper 可以不配，配了也不报错）
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    # 关掉启动时那行 MyBatis-Plus 广告
+    banner: false
+    db-config:
+      # 主键策略：auto = 跟着数据库自增走，对应建表语句里的 AUTO_INCREMENT
+      id-type: auto
+      # 逻辑删除字段：你现在的表里没有 deleted 列，一旦打开，所有 SQL 都会自动拼
+      # WHERE deleted=0 从而报“Unknown column 'deleted'”，所以先注释掉，等加了这个列再开
+      # logic-delete-field: deleted
+      # logic-delete-value: 1
+      # logic-not-delete-value: 0

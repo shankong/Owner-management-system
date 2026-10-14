@@ -1,0 +1,6 @@
+com\shankong\admin\dto\UserRegisterDTO.class
+com\shankong\admin\entity\User.class
+com\shankong\admin\controller\UserController.class
+com\shankong\admin\mapper\UserMapper.class
+com\shankong\admin\service\UserService.class
+com\shankong\admin\dto\UserVO.class
