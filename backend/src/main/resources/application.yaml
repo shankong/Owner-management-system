@@ -79,3 +79,16 @@ mybatis-plus:
       # logic-delete-field: deleted
       # logic-delete-value: 1
       # logic-not-delete-value: 0
+
+jwt:
+  # 签名密钥（HMAC256）。auth0 的 HMAC256 接受任意长度字符串、不会像 jjwt 那样校验强度，
+  # 但密钥太短等于没加密，上线前务必换成随机长字符串，而且绝对不能提交到 git。
+  secret: owner-system-2026-jwt-secret-key-change-me-before-production
+  # token 有效期，单位毫秒。86400000 = 1 天
+  expiration: 86400000
+  # 刷新 token 有效期，单位毫秒。604800000 = 7 天
+  refresh-expiration: 604800000
+  header: Authorization # token头部名称
+  # 签发者，写进 payload 的 iss 字段，方便以后排查 token 是哪套系统发的
+  token-prefix: "Bearer "
+  issuer: owner-system-backend

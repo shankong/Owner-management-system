@@ -6,13 +6,17 @@ import com.shankong.admin.dto.UserLoginDTO;
 import com.shankong.admin.dto.UserVO;
 import com.shankong.admin.entity.User;
 import com.shankong.admin.mapper.UserMapper;
+import com.shankong.admin.service.convert.UserConvert;
+import com.shankong.admin.utils.JwtTokenUtil;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
  * 用户服务类
  */
+@Slf4j
 @Service
 public class UserService {
     @Resource
@@ -41,25 +45,26 @@ public class UserService {
                         .eq(User::getUsername, account)
                         .or()
                         .eq(User::getPhone, account));
+        // 校验用户是否存在
         if (user == null) {
             throw new BusinessException("400", "用户不存在");
-        } else if (user.getStatus() == 0) {
-            throw new BusinessException("400", "用户已被禁用，请联系管理员");
         }
         // 密文哈希密码校验
         // matches(用户输入的明文，数据库中的密文密码)
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        else if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BusinessException("400", "用户名或密码错误");
         }
-        UserVO userVO = new UserVO();
-        userVO.setId(user.getId());
-        userVO.setUsername(user.getUsername());
-        userVO.setRealName(user.getRealName());
-        userVO.setPhone(user.getPhone());
-        userVO.setUserTypeName(user.getUserTypeName(user.getUserType()));
-        userVO.setStatusName(user.getStatusName(user.getStatus()));
-        userVO.setCreatedAt(user.getCreatedAt());
+        // 校验用户状态是否正常
+        else if (user.getStatus() == 0) {
+            throw new BusinessException("400", "用户已被禁用，请联系管理员");
+        }
 
-        return userVO;
+
+        // 生成token
+        String token = JwtTokenUtil.generateToken(user.getId(), user.getUsername(), user.getUserType());
+        log.info("token:{}", token);
+
+        // 构建VO并返回
+        return UserConvert.entityToVO(token, UserConvert.entityToDetailResponse(user));
     }
 }
