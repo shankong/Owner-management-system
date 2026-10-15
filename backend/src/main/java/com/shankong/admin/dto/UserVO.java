@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 返回给前端的用户视图对象
+ */
 @Data
 public class UserVO {
     private Long id;

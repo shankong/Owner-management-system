@@ -7,12 +7,19 @@ import com.shankong.admin.dto.UserVO;
 import com.shankong.admin.entity.User;
 import com.shankong.admin.mapper.UserMapper;
 import jakarta.annotation.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * 用户服务类
+ */
 @Service
 public class UserService {
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 用户登陆服务
@@ -39,7 +46,9 @@ public class UserService {
         } else if (user.getStatus() == 0) {
             throw new BusinessException("400", "用户已被禁用，请联系管理员");
         }
-        if (!user.getPassword().equals(password)) {
+        // 密文哈希密码校验
+        // matches(用户输入的明文，数据库中的密文密码)
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BusinessException("400", "用户名或密码错误");
         }
         UserVO userVO = new UserVO();

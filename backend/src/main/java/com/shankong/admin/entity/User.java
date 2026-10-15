@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 用户实体类
+ */
 @Data
 public class User {
     private Long id;
