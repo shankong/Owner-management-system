@@ -2,6 +2,7 @@ package com.shankong.admin.controller;
 
 import com.shankong.admin.common.Result;
 import com.shankong.admin.dto.UserLoginDTO;
+import com.shankong.admin.dto.UserRegisterDTO;
 import com.shankong.admin.dto.UserVO;
 import com.shankong.admin.service.UserService;
 import jakarta.annotation.Resource;
@@ -25,4 +26,8 @@ public class UserController {
         return Result.success(userService.userLoginService(userLoginDTO));
     }
 
+    @PostMapping("/adminRegister")
+    public void adminRegister(@RequestBody @Valid UserRegisterDTO userRegisterDTO)  {
+        userService.adminRegisterService(userRegisterDTO);
+    }
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class UserLoginDTO {
     @NotBlank(message = "用户名或手机号不能为空")
-    private String account;
+    private String emailOrPhone;
 
     @NotBlank(message = "密码不能为空")
     private String password;

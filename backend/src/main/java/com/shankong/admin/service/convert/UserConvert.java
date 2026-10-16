@@ -9,6 +9,7 @@ public class UserConvert {
         return UserVO.UserDetailResponseDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .realName(user.getRealName())
                 .userType(user.getUserType())
                 .status(user.getStatus())
                 .createdAt(user.getCreatedAt())

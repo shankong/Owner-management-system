@@ -19,7 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     public static final String[] PUBLIC_PATHS = {
             "/",
-            "/user/login"
+            "/user/login",
+            "/user/adminRegister",
     };
 
     // 配置过滤器链
