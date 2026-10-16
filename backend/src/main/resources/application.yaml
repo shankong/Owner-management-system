@@ -24,7 +24,9 @@ spring:
           # 连接池类型：真正决定用哪个池。用了 druid 类，pom 里就必须有 com.alibaba:druid
           type: com.alibaba.druid.pool.DruidDataSource
           driverClassName: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/owner_system?useSSL=false&serverTimezone=UTC
+          # userSSL(专用加密路线)，allowPublicKeyRetrieval=true 允许获取公钥，解决连接失败问题
+          # 只适用于本地开发环境，生产环境请关闭该参数
+          url: jdbc:mysql://localhost:3306/owner_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           username: root
           password: 123456
           # 连接池参数（可选，不写就用 Druid 默认值），等价于原来的 spring.datasource.druid.*
