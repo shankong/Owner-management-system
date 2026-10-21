@@ -21,6 +21,7 @@ public class SecurityConfig {
             "/",
             "/user/login",
             "/user/adminRegister",
+            "/user/adminRegister/emailCode",
     };
 
     // 配置过滤器链
